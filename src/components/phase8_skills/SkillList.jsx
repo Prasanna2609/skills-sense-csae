@@ -93,7 +93,7 @@ const SkillList = ({ skills = [], activeSkill, onSelectSkill, onToggleSkill }) =
                   </span>
                 </div>
 
-                {expandedSkills[skill.id] && (
+                {expandedSkills[skill.id] ? (
                   <div style={{ paddingLeft: '18px', marginTop: '4px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <div 
                       onClick={(e) => { e.stopPropagation(); setModalFile({ name: 'SKILL.md', content: skill.systemPrompt }); }}
@@ -107,7 +107,7 @@ const SkillList = ({ skills = [], activeSkill, onSelectSkill, onToggleSkill }) =
                     >
                       <span style={{ fontSize: '12px' }}>📁</span> references/
                     </div>
-                    {expandedFolders[skill.id] && (
+                    {expandedFolders[skill.id] ? (
                       <div style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         <div 
                           onClick={(e) => { e.stopPropagation(); setModalFile({ name: 'examples.md', content: skill.references?.examples }); }}
@@ -122,9 +122,9 @@ const SkillList = ({ skills = [], activeSkill, onSelectSkill, onToggleSkill }) =
                           <span style={{ fontSize: '12px' }}>📄</span> guidelines.md
                         </div>
                       </div>
-                    )}
+                    ) : null}
                   </div>
-                )}
+                ) : null}
               </div>
             );
           })}
@@ -132,7 +132,7 @@ const SkillList = ({ skills = [], activeSkill, onSelectSkill, onToggleSkill }) =
       )}
 
       {/* Modal */}
-      {modalFile && (
+      {modalFile ? (
         <div 
           style={{
             position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
@@ -178,7 +178,7 @@ const SkillList = ({ skills = [], activeSkill, onSelectSkill, onToggleSkill }) =
             </pre>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

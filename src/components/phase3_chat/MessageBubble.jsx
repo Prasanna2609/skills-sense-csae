@@ -20,9 +20,9 @@ const MessageBubble = ({ role, content, skillActive, skillName }) => {
 
         {/* Bubble Area */}
         <div className={`flex flex-col ${isAssistant ? 'items-start' : 'items-end'}`}>
-          {isAssistant && skillActive && (
+          {isAssistant && skillActive ? (
             <SkillBadge skillActive={skillActive} skillName={skillName} />
-          )}
+          ) : null}
           <div 
             className={`px-3 py-[9px] rounded-[9px] text-[12px] leading-[1.55] text-[#c8c8c8] ${
               isAssistant 

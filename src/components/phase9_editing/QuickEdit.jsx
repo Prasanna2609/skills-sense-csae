@@ -107,7 +107,7 @@ const QuickEdit = ({ skill, onSave, onCancel, onToggleReference }) => {
             Drop .md file here or click to upload
           </div>
         </div>
-        {uploadedFile && (
+        {uploadedFile ? (
           <div style={{ marginTop: '8px', padding: '12px', background: 'rgba(76, 175, 80, 0.08)', border: '0.5px solid rgba(76, 175, 80, 0.2)', borderRadius: '6px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#4CAF50', fontSize: '11px', fontWeight: '500', marginBottom: '6px' }}>
               <span>✓</span> {uploadedFile.name} — Added to guidelines
@@ -116,7 +116,7 @@ const QuickEdit = ({ skill, onSave, onCancel, onToggleReference }) => {
               {uploadedFile.preview}
             </div>
           </div>
-        )}
+        ) : null}
       </div>
 
       <div style={{ display: 'flex', gap: '12px' }}>

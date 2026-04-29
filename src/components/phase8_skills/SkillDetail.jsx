@@ -110,27 +110,27 @@ const SkillDetail = ({ skill, onActivate, onSave, onToggleSkill, onToggleReferen
               >
                 Edit with Claude
               </button>
-              {showComingSoon && (
+              {showComingSoon ? (
                 <div style={{ fontSize: '10px', color: '#aaa', position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: '4px' }}>
                   Coming Soon
                 </div>
-              )}
+              ) : null}
             </div>
             
-            {!isOn && (
+            {!isOn ? (
               <button 
                 onClick={() => onActivate && onActivate(skill)}
                 style={{ marginLeft: 'auto', background: '#CF643F', color: '#fff', fontSize: '12px', fontWeight: '500', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
               >
                 Activate Skill
               </button>
-            )}
+            ) : null}
           </div>
         </>
       )}
 
       {/* Modal */}
-      {modalFile && (
+      {modalFile ? (
         <div 
           style={{
             position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
@@ -172,7 +172,7 @@ const SkillDetail = ({ skill, onActivate, onSave, onToggleSkill, onToggleReferen
             </pre>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

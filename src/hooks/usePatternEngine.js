@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { detectPattern } from '../engine/detector';
 import { processMatch } from '../engine/nudgeManager';
 import { generateSkill } from './useSkillGeneration';
@@ -14,9 +14,14 @@ import seedPatterns from '../data/seedPatterns';
  */
 export const usePatternEngine = () => {
   // Deep clone seed patterns so mutations stay local to this session
-  const [patterns, setPatterns] = useState(() =>
-    JSON.parse(JSON.stringify(seedPatterns))
-  );
+  const [patterns, setPatterns] = useState(() => {
+    const saved = localStorage.getItem('skill-sense-patterns');
+    return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(seedPatterns));
+  });
+
+  useEffect(() => {
+    localStorage.setItem('skill-sense-patterns', JSON.stringify(patterns));
+  }, [patterns]);
 
   // Stores the last 3 Claude responses that correspond to matched prompts
   const [matchedResponses, setMatchedResponses] = useState([]);
@@ -157,6 +162,11 @@ export const usePatternEngine = () => {
     }
   }, [patterns, matchedResponses, isPreparingNudge, activeNudge]);
 
+  const resetEngine = useCallback(() => {
+    setPatterns(JSON.parse(JSON.stringify(seedPatterns)));
+    setActiveNudge(null);
+  }, []);
+
   return {
     patterns,
     activeNudge,
@@ -165,6 +175,7 @@ export const usePatternEngine = () => {
     analyzePromptRealTime,
     dismissNudge,
     archivePattern,
-    activateNudge
+    activateNudge,
+    resetEngine
   };
 };

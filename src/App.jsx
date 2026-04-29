@@ -55,7 +55,8 @@ function App() {
     skillBadge,
     updateSkillReference,
     updateSkillSystemPrompt,
-    loadMessages
+    loadMessages,
+    clearActiveSkill
   } = useGroqChat();
 
   const {
@@ -65,7 +66,8 @@ function App() {
     analyzePrompt,
     analyzePromptRealTime,
     dismissNudge,
-    activateNudge
+    activateNudge,
+    resetEngine
   } = usePatternEngine();
 
   const { handleInputChange } = useNudge(patterns, activeNudge, analyzePromptRealTime);
@@ -130,7 +132,11 @@ function App() {
   const handleNewChat = useCallback(() => {
     startNewChat();
     loadMessages([]);
-  }, [startNewChat, loadMessages]);
+    localStorage.removeItem('skill-sense-patterns');
+    localStorage.removeItem('skill-sense-active-skill');
+    if (resetEngine) resetEngine();
+    if (clearActiveSkill) clearActiveSkill();
+  }, [startNewChat, loadMessages, resetEngine, clearActiveSkill]);
 
   const handleLoadChat = useCallback((chatId) => {
     const msgs = loadChat(chatId);

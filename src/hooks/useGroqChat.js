@@ -1,10 +1,21 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { groq, GROQ_MODEL } from '../lib/groq';
 
 export const useGroqChat = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [activeSkill, setActiveSkill] = useState(null);
+  const [activeSkill, setActiveSkill] = useState(() => {
+    const savedSkill = localStorage.getItem('skill-sense-active-skill');
+    return savedSkill ? JSON.parse(savedSkill) : null;
+  });
+
+  useEffect(() => {
+    if (activeSkill) {
+      localStorage.setItem('skill-sense-active-skill', JSON.stringify(activeSkill));
+    } else {
+      localStorage.removeItem('skill-sense-active-skill');
+    }
+  }, [activeSkill]);
   const [skillBadge, setSkillBadge] = useState(null);
   const activeSkillRef = useRef(null);
   const messagesRef = useRef([]);
@@ -152,6 +163,12 @@ export const useGroqChat = () => {
     setMessages(msgs || []);
   }, []);
 
+  const clearActiveSkill = useCallback(() => {
+    setActiveSkill(null);
+    activeSkillRef.current = null;
+    setSkillBadge(null);
+  }, []);
+
   return {
     messages,
     isLoading,
@@ -162,6 +179,7 @@ export const useGroqChat = () => {
     updateSkillReference,
     updateSkillSystemPrompt,
     buildSystemPrompt,
-    loadMessages
+    loadMessages,
+    clearActiveSkill
   };
 };

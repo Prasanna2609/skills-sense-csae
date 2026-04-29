@@ -28,7 +28,7 @@ export async function generateSkill(matchedPrompts, patternName, matchedResponse
         },
         {
           role: 'user',
-          content: `The user has sent these prompts repeatedly:\n"${matchedPrompts[0] || ''}"\n"${matchedPrompts[1] || ''}"\n"${matchedPrompts[2] || ''}"\n\nDomain: ${patternName}\n\nGenerate a comprehensive system prompt (minimum 150 words) that captures their specific workflow, preferences, and standards. The prompt MUST be structured with clear sections: Role Definition, Output Style, Constraints, and Trigger Conditions. Do not provide a one-liner. Be specific — extract real patterns from their prompts, not generic descriptions. No filler. No pleasantries.\n\nReturn JSON only. No markdown, no backticks:\n{"name": "string (max 4 words, must end with the word 'Skill')", "systemPrompt": "string"}`
+          content: `The user has sent these prompts repeatedly:\n"${matchedPrompts[0] || ''}"\n"${matchedPrompts[1] || ''}"\n"${matchedPrompts[2] || ''}"\n\nDomain: ${patternName}\n\nGenerate a comprehensive system prompt (minimum 150 words) that captures their specific workflow, preferences, and standards. The prompt MUST be structured with clear sections: Role Definition, Output Style, Constraints, and Trigger Conditions. Do not provide a one-liner. Be specific — extract real patterns from their prompts, not generic descriptions. No filler. No pleasantries.\n\nReturn a single flat JSON object only. The systemPrompt value must be a plain text string, NOT a nested object or array. Example format:\n{"name": "Email Writing Skill", "systemPrompt": "You are an expert email writer..."}`
         }
       ],
       model: GROQ_MODEL,
@@ -37,6 +37,16 @@ export async function generateSkill(matchedPrompts, patternName, matchedResponse
 
     const raw = call1Response.choices[0]?.message?.content || '';
     skillMd = JSON.parse(raw);
+
+    if (typeof skillMd.systemPrompt === 'object' && skillMd.systemPrompt !== null) {
+      skillMd.systemPrompt = Object.entries(skillMd.systemPrompt)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('\n\n');
+    }
+
+    if (typeof skillMd.name === 'object' && skillMd.name !== null) {
+      skillMd.name = Object.values(skillMd.name)[0] || 'Custom Skill';
+    }
   } catch (err) {
     console.error('Skill generation Call 1 failed:', err);
     skillMd = {
@@ -70,6 +80,9 @@ export async function generateSkill(matchedPrompts, patternName, matchedResponse
     });
 
     examplesMd = call2Response.choices[0]?.message?.content || '';
+    if (typeof examplesMd !== 'string') {
+      examplesMd = JSON.stringify(examplesMd, null, 2);
+    }
   } catch (err) {
     console.error('Skill generation Call 2 failed:', err);
     examplesMd = matchedPrompts.map((prompt, i) =>
@@ -97,6 +110,9 @@ export async function generateSkill(matchedPrompts, patternName, matchedResponse
     });
 
     guidelinesMd = call3Response.choices[0]?.message?.content || '';
+    if (typeof guidelinesMd !== 'string') {
+      guidelinesMd = JSON.stringify(guidelinesMd, null, 2);
+    }
   } catch (err) {
     console.error('Skill generation Call 3 failed:', err);
     guidelinesMd = `## Tone\nMatch the user's established ${patternName} communication style.\n\n## Format\nFollow the structure demonstrated in previous ${patternName} sessions.\n\n## Constraints\nStay within the ${patternName} domain. Do not deviate from established patterns.`;

@@ -1,4 +1,27 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { hasError: false, error: null }
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error }
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{color: 'white', padding: '20px', background: '#111'}}>
+          <h2>Error caught:</h2>
+          <pre style={{color: 'red', fontSize: '12px', whiteSpace: 'pre-wrap'}}>
+            {this.state.error?.toString()}
+          </pre>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 import Sidebar from './components/phase2_layout/Sidebar';
 import Header from './components/phase2_layout/Header';
 import AdminPanel from './components/phase6_admin/AdminPanel';
@@ -157,7 +180,8 @@ function App() {
   }, [activateNudge, activateSkill]);
 
   return (
-    <div className="flex h-screen w-full bg-[#1a1a1a] overflow-hidden text-[#e8e8e8] font-sans">
+    <ErrorBoundary>
+      <div className="flex h-screen w-full bg-[#1a1a1a] overflow-hidden text-[#e8e8e8] font-sans">
       <Sidebar 
         adminVisible={adminVisible} 
         toggleAdmin={() => setAdminVisible(!adminVisible)}
@@ -222,6 +246,7 @@ function App() {
         sessionStats={sessionStats}
       />
     </div>
+    </ErrorBoundary>
   );
 }
 

@@ -197,7 +197,7 @@ function App() {
         )}
       </div>
 
-      {adminVisible && (
+      {adminVisible ? (
         <AdminPanel
           patterns={patterns}
           promptsSent={sessionStats.promptsSent}
@@ -206,14 +206,14 @@ function App() {
           onPatternClick={handlePatternClick}
           onViewDetail={handleViewDetail}
         />
-      )}
+      ) : null}
 
-      {selectedPattern && (
+      {selectedPattern ? (
         <PatternDetailModal 
           pattern={selectedPattern} 
           onClose={() => setSelectedPattern(null)} 
         />
-      )}
+      ) : null}
 
       <BriefOverlay
         briefOpen={briefOpen}

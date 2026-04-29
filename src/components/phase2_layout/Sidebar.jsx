@@ -103,7 +103,7 @@ export default function Sidebar({
                     </div>
 
                     {/* Delete button — visible on hover */}
-                    {isHovered && (
+                    {isHovered ? (
                       <button
                         data-testid={`delete-chat-${chat.id}`}
                         onClick={(e) => {
@@ -114,7 +114,7 @@ export default function Sidebar({
                       >
                         <X size={12} />
                       </button>
-                    )}
+                    ) : null}
                   </div>
                 );
               })

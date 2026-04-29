@@ -37,7 +37,7 @@ const ChatArea = ({ messages, isLoading, skillBadge }) => {
             skillName={skillBadge?.name}
           />
         ))}
-        {isLoading && (
+        {isLoading ? (
           <div className="flex justify-start mb-6">
             <div style={{ backgroundColor: '#CF643F', color: '#fff' }} className="w-[27px] h-[27px] shrink-0 rounded-[4px] flex items-center justify-center text-[14px]">
               ✳
@@ -46,7 +46,7 @@ const ChatArea = ({ messages, isLoading, skillBadge }) => {
               thinking...
             </div>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

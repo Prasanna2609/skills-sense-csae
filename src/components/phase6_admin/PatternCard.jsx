@@ -68,19 +68,19 @@ const PatternCard = ({ pattern, onClick }) => {
         </span>
       </div>
 
-      {pattern.counter > 0 && (
+      {pattern.counter > 0 ? (
         <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', position: 'relative' }}>
           {tagsToShow.map((tag, i) => (
             <span key={i} style={{ background: '#1e1e1e', border: '0.5px solid #2a2a2a', color: '#666', fontSize: '10px', padding: '2px 6px', borderRadius: '3px' }} data-testid="signal-tag">
               {tag}
             </span>
           ))}
-          {extraTags > 0 && (
+          {extraTags > 0 ? (
             <span style={{ color: '#444', fontSize: '10px', padding: '2px 0' }}>+{extraTags}</span>
-          )}
+          ) : null}
           <span style={{ position: 'absolute', bottom: '0', right: '0', color: '#CF643F', fontSize: '12px' }}>›</span>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

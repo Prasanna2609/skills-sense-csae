@@ -46,14 +46,14 @@ const ChatInput = ({
 
   return (
     <div className="w-full max-w-[740px] mx-auto px-4 pb-4">
-      {activeNudge && (
+      {activeNudge ? (
         <NudgeCard
           activeNudge={activeNudge}
           onActivate={onActivate}
           onPreview={onPreview}
           onDismiss={onDismiss}
         />
-      )}
+      ) : null}
       
       <div 
         className={`bg-[#232323] border border-[#2e2e2e] rounded-[11px] p-2 flex items-end gap-2 ${

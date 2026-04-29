@@ -151,11 +151,11 @@ const BriefOverlay = ({ briefOpen, setBriefOpen, patterns = [], sessionStats }) 
                 </div>
 
                 {/* Stage Skill Created notification */}
-                {pattern.stage === 'activated' && (
+                {pattern.stage === 'activated' ? (
                   <div style={{ background: 'rgba(76,175,80,0.1)', border: '0.5px solid rgba(76,175,80,0.2)', color: '#4CAF50', fontSize: '10px', padding: '6px 8px', borderRadius: '4px', marginBottom: '12px', textAlign: 'center' }}>
                     Skill Created: {pattern.name}
                   </div>
-                )}
+                ) : null}
 
                 {/* Signal pills row */}
                 <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: 'auto' }}>
@@ -177,9 +177,9 @@ const BriefOverlay = ({ briefOpen, setBriefOpen, patterns = [], sessionStats }) 
                       </span>
                     );
                   })}
-                  {pattern.anchors.length > 5 && (
+                  {pattern.anchors.length > 5 ? (
                     <span style={{ color: '#444', fontSize: '9px', padding: '2px 0' }}>+{pattern.anchors.length - 5}</span>
-                  )}
+                  ) : null}
                 </div>
               </div>
             );
@@ -193,12 +193,12 @@ const BriefOverlay = ({ briefOpen, setBriefOpen, patterns = [], sessionStats }) 
 
       </div>
 
-      {selectedPattern && (
+      {selectedPattern ? (
         <PatternDetailModal 
           pattern={selectedPattern} 
           onClose={() => setSelectedPattern(null)} 
         />
-      )}
+      ) : null}
     </div>
   );
 };
